@@ -65,4 +65,19 @@ class Contact
     return $contacts;
   }
 
+  public static function findOne(string $uri): array
+  {
+    $directory = __DIR__ . '/../../var/contacts';
+    $files = glob($directory . '/*_' . $uri . '.json');
+
+    if (count($files) === 0) {
+      return null; // No file found
+    }
+
+    $file = $files[0];
+    $json = file_get_contents($file);
+    // je suppose que y'a qu'un seul fichier par email
+
+    return json_decode($json, true);
+  }
 }

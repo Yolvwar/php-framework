@@ -9,6 +9,7 @@ class Contact
   private string $message;
   private int $dateOfCreation;
   private int $dateOfLastUpdate;
+  private string $directory = __DIR__ . '/../../var/contacts';
 
   public function __construct(string $email, string $subject, string $message)
   {
@@ -36,8 +37,8 @@ class Contact
   }
 
   public function save()
-  { 
-    $directory = __DIR__ . '/../../var/contacts';
+  {
+    $directory = $this->directory;
     // Edge case: if the directory does not exist, create it , if not error will be thrown
     if (!is_dir($directory)) {
       mkdir($directory, 0777, true);
@@ -47,4 +48,21 @@ class Contact
 
     file_put_contents($directory . '/' . $this->fileName(), $json);
   }
+
+  public static function findAll(): array
+  {
+    $directory = __DIR__ . '/../../var/contacts';
+
+    $files = glob($directory . '/*.json');
+
+    $contacts = [];
+
+    foreach ($files as $file) {
+      $json = file_get_contents($file);
+      $contacts[] = json_decode($json, true);
+    }
+
+    return $contacts;
+  }
+
 }

@@ -11,7 +11,6 @@ class PostContactController extends AbstractController
 {
   public function process(Request $request): Response
   {
-    $headers = $request->getHeaders();
     if ($this->jsonValidation($request) === false) {
       return new Response('Invalid Content-Type', 400);
     }

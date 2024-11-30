@@ -12,13 +12,28 @@ class GetContactController extends AbstractController
   public function process(Request $request): Response
   {
     $uri = $request->getUri();
-    $email = basename($uri);
-    $contact = Contact::findOne($email);
+    $filename = basename($uri);
 
-    if ($contact === null) {
-      return new Response('Contact not found', 404);
+    return $this->getContact($filename);
+  }
+
+  private function getContact(string $filename): Response
+  {
+    $directory = __DIR__ . "/../../var/contacts/";
+
+    // Add .json extension if missing
+    if (!str_ends_with($filename, '.json')) {
+      $filename .= '.json';
     }
 
-    return $this->jsonResponse($contact, 200);
+    $filePath = $directory . $filename;
+
+    if (!file_exists($filePath)) {
+      return $this->jsonResponse(['error' => 'Contact not found'], 404);
+    }
+
+    $contact = Contact::jsonRequestReader($filePath);
+
+    return $this->jsonResponse($contact->bodyArray(), 200);
   }
 }

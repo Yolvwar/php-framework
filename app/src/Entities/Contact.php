@@ -65,6 +65,8 @@ class Contact
     return $contacts;
   }
 
+  /*
+  // Useless function since we are using the filename to get the contact
   public static function findOne(string $uri): array
   {
     $directory = __DIR__ . '/../../var/contacts';
@@ -79,7 +81,7 @@ class Contact
     // je suppose que y'a qu'un seul fichier par email
 
     return json_decode($json, true);
-  }
+  }*/
 
   public static function jsonRequestReader(string $filePath): self
   {

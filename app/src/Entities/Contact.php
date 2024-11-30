@@ -80,4 +80,53 @@ class Contact
 
     return json_decode($json, true);
   }
+
+  public static function jsonRequestReader(string $filePath): self
+  {
+    $data = json_decode(file_get_contents($filePath), true);
+    $contact = new self($data['email'], $data['subject'], $data['message']);
+    $contact->dateOfCreation = $data['dateOfCreation'];
+    $contact->dateOfLastUpdate = $data['dateOfLastUpdate'];
+    return $contact;
+  }
+
+  public function setEmail(string $email): void
+  {
+    $this->email = $email;
+  }
+
+  public function setSubject(string $subject): void
+  {
+    $this->subject = $subject;
+  }
+
+  public function setMessage(string $message): void
+  {
+    $this->message = $message;
+  }
+
+  public function setDateOfLastUpdate(int $timestamp): void
+  {
+    $this->dateOfLastUpdate = $timestamp;
+  }
+
+  public function update(array $body): void
+  {
+    $this->setEmail($body['email']);
+    $this->setSubject($body['subject']);
+    $this->setMessage($body['message']);
+    $this->setDateOfLastUpdate(time());
+  }
+
+  public static function fieldsCheckValid(array $data): bool
+  {
+    $allowedKeys = ['email', 'subject', 'message'];
+    return empty(array_diff(array_keys($data), $allowedKeys));
+  }
+
+  public function saveFile(string $filePath): void
+  {
+    $data = $this->bodyArray();
+    file_put_contents($filePath, json_encode($data));
+  }
 }

@@ -20,7 +20,7 @@
         "controller": "GetContactController"
     },
     {
-        "path": "/contact/{email}",
+        "path": "/contact/{filename}",
         "methods": ["PATCH"],
         "controller": "PatchContactController"
     }

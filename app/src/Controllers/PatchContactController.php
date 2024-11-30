@@ -13,21 +13,18 @@ class PatchContactController extends AbstractController
   public function process(Request $request,): Response
   {
     $uri = $request->getUri();
-    $email = basename($uri);
+    $filename = basename($uri);
 
-    return $this->updateContact($request, $email);
+    return $this->updateContact($request, $filename);
   }
 
-  private function updateContact(Request $request, string $email): Response
+  private function updateContact(Request $request, string $filename): Response
   {
     $directory = __DIR__ . "/../../var/contacts/";
 
-    // Add .json extension if missing
-    if (!str_ends_with($email, '.json')) {
-      $email .= '.json';
-    }
+    $filename = $this->addJsonExtensionIfMissing($filename);
 
-    $filePath = $directory . $email;
+    $filePath = $directory . $filename;
 
     if (!file_exists($filePath)) {
       error_log("File not found: " . $filePath);

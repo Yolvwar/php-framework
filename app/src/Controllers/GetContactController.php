@@ -21,10 +21,7 @@ class GetContactController extends AbstractController
   {
     $directory = __DIR__ . "/../../var/contacts/";
 
-    // Add .json extension if missing
-    if (!str_ends_with($filename, '.json')) {
-      $filename .= '.json';
-    }
+    $filename = $this->addJsonExtensionIfMissing($filename);
 
     $filePath = $directory . $filename;
 

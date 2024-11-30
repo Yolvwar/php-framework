@@ -17,4 +17,12 @@ abstract class AbstractController{
     {
         return $request->getHeaders()['Content-Type'] === 'application/json';
     }
+
+    protected function addJsonExtensionIfMissing(string $filename): string
+    {
+        if (!str_ends_with($filename, '.json')) {
+            $filename .= '.json';
+        }
+        return $filename;
+    }
 }
